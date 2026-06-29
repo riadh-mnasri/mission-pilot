@@ -1,15 +1,25 @@
 /**
- * MissionPilot — Pricing section
  * Copyright © 2026 Riadh MNASRI. All rights reserved.
+ * MissionPilot — Pricing section
  */
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 
-const PLANS = [
+interface Plan {
+  name: string;
+  monthlyPrice: number;
+  yearlyPrice: number;
+  description: string;
+  cta: string;
+  highlight: boolean;
+  features: string[];
+}
+
+const PLANS: Plan[] = [
   {
     name: "Free",
     monthlyPrice: 0,
@@ -50,77 +60,177 @@ export default function Pricing() {
   const [yearly, setYearly] = useState(false);
 
   return (
-    <section id="pricing" className="py-24 px-6 bg-white/2">
+    <section
+      id="pricing"
+      className="py-28 px-6"
+      style={{ background: "rgba(255,255,255,0.015)" }}
+    >
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <p className="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-3">Pricing</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+
+        {/* Header */}
+        <div className="text-center mb-14">
+          <p
+            className="text-sm font-bold uppercase tracking-widest mb-4"
+            style={{ color: "#60a5fa" }}
+          >
+            Pricing
+          </p>
+          <h2
+            className="font-black tracking-tight text-white mb-4"
+            style={{ fontSize: "clamp(2rem, 5vw, 3.2rem)" }}
+          >
             Simple,
             <span className="gradient-text"> transparent pricing</span>
           </h2>
-          <p className="text-slate-400">No contracts. Cancel anytime.</p>
+          <p className="text-slate-400 text-lg">No contracts. Cancel anytime.</p>
 
-          {/* Toggle */}
-          <div className="inline-flex items-center gap-3 mt-8 glass rounded-full px-4 py-2">
-            <span className={`text-sm ${!yearly ? "text-white" : "text-slate-400"}`}>Monthly</span>
+          {/* Billing toggle */}
+          <div
+            className="inline-flex items-center gap-3 mt-10 px-4 py-2 rounded-full"
+            style={{
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
+          >
+            <span
+              className={`text-sm font-medium transition-colors ${!yearly ? "text-white" : "text-slate-500"}`}
+            >
+              Monthly
+            </span>
             <button
               onClick={() => setYearly(!yearly)}
-              className={`w-10 h-5 rounded-full transition-colors relative ${yearly ? "bg-blue-600" : "bg-white/10"}`}
+              className="relative w-11 h-6 rounded-full transition-colors"
+              style={{
+                background: yearly
+                  ? "linear-gradient(135deg, #2563eb, #7c3aed)"
+                  : "rgba(255,255,255,0.1)",
+              }}
+              aria-label="Toggle yearly billing"
             >
               <span
-                className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-transform ${yearly ? "translate-x-5" : "translate-x-0.5"}`}
+                className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200"
+                style={{ transform: yearly ? "translateX(1.3rem)" : "translateX(0.125rem)" }}
               />
             </button>
-            <span className={`text-sm ${yearly ? "text-white" : "text-slate-400"}`}>
-              Yearly <span className="text-emerald-400 text-xs ml-1">-20%</span>
+            <span
+              className={`text-sm font-medium transition-colors ${yearly ? "text-white" : "text-slate-500"}`}
+            >
+              Yearly
+              <span
+                className="ml-2 text-xs font-bold"
+                style={{ color: "#34d399" }}
+              >
+                −20%
+              </span>
             </span>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-5">
+        {/* Plans grid */}
+        <div className="grid md:grid-cols-2 gap-5 items-start">
           {PLANS.map((plan) => {
             const price = yearly ? plan.yearlyPrice : plan.monthlyPrice;
+
             return (
               <div
                 key={plan.name}
-                className={`rounded-2xl p-7 flex flex-col gap-6 ${
+                className="relative rounded-2xl p-8 flex flex-col gap-7 overflow-hidden"
+                style={
                   plan.highlight
-                    ? "bg-gradient-to-b from-blue-600/20 to-violet-600/10 border border-blue-500/30"
-                    : "glass"
-                }`}
+                    ? {
+                        background:
+                          "linear-gradient(160deg, rgba(37,99,235,0.18) 0%, rgba(124,58,237,0.10) 60%, rgba(14,20,32,0.95) 100%)",
+                        border: "1px solid rgba(59,130,246,0.4)",
+                        boxShadow:
+                          "0 0 0 1px rgba(59,130,246,0.15), 0 8px 48px rgba(59,130,246,0.2), 0 0 80px rgba(139,92,246,0.1)",
+                      }
+                    : {
+                        background: "rgba(255,255,255,0.025)",
+                        border: "1px solid rgba(255,255,255,0.07)",
+                        backdropFilter: "blur(16px)",
+                      }
+                }
               >
+                {/* Top gradient accent (Pro only) */}
                 {plan.highlight && (
-                  <span className="self-start text-xs font-bold text-blue-400 bg-blue-400/10 border border-blue-400/20 px-3 py-1 rounded-full">
+                  <div
+                    className="absolute top-0 left-0 right-0 h-px"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, transparent, rgba(99,163,255,0.9), rgba(167,139,250,0.7), transparent)",
+                    }}
+                    aria-hidden="true"
+                  />
+                )}
+
+                {/* Most popular badge */}
+                {plan.highlight && (
+                  <span
+                    className="self-start text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5"
+                    style={{
+                      background: "rgba(59,130,246,0.15)",
+                      border: "1px solid rgba(59,130,246,0.3)",
+                      color: "#93c5fd",
+                    }}
+                  >
+                    <Sparkles className="w-3 h-3" />
                     Most popular
                   </span>
                 )}
 
+                {/* Plan name */}
                 <div>
-                  <h3 className="text-xl font-bold text-white">{plan.name}</h3>
+                  <h3 className="text-xl font-black text-white">{plan.name}</h3>
                   <p className="text-slate-400 text-sm mt-1">{plan.description}</p>
                 </div>
 
-                <div className="flex items-end gap-1">
-                  <span className="text-5xl font-bold text-white">{price === 0 ? "Free" : `€${price}`}</span>
-                  {price > 0 && <span className="text-slate-400 mb-2">/month</span>}
+                {/* Price */}
+                <div className="flex items-end gap-1.5">
+                  <span
+                    className="font-black leading-none"
+                    style={{
+                      fontSize: "3.2rem",
+                      color: plan.highlight ? "#93c5fd" : "#e2e8f0",
+                    }}
+                  >
+                    {price === 0 ? "Free" : `€${price}`}
+                  </span>
+                  {price > 0 && (
+                    <span className="text-slate-400 mb-2.5 text-sm">/month</span>
+                  )}
                 </div>
 
-                <Link href="/dashboard">
+                {/* CTA */}
+                <Link href="/dashboard" className="block">
                   <Button
-                    className={`w-full rounded-xl py-5 font-semibold ${
+                    className="w-full rounded-xl py-5 font-bold text-sm shimmer-btn"
+                    style={
                       plan.highlight
-                        ? "bg-blue-600 hover:bg-blue-500 text-white"
-                        : "bg-white/6 hover:bg-white/10 text-white border border-white/10"
-                    }`}
+                        ? {
+                            background:
+                              "linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)",
+                            color: "#fff",
+                            boxShadow: "0 4px 20px rgba(59,130,246,0.35)",
+                          }
+                        : {
+                            background: "rgba(255,255,255,0.06)",
+                            border: "1px solid rgba(255,255,255,0.1)",
+                            color: "#e2e8f0",
+                          }
+                    }
                   >
                     {plan.cta}
                   </Button>
                 </Link>
 
+                {/* Feature list */}
                 <ul className="space-y-3">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-center gap-3 text-sm text-slate-300">
-                      <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <Check
+                        className="w-4 h-4 shrink-0"
+                        style={{ color: plan.highlight ? "#34d399" : "#4ade80" }}
+                      />
                       {f}
                     </li>
                   ))}
@@ -130,7 +240,7 @@ export default function Pricing() {
           })}
         </div>
 
-        <p className="text-center text-xs text-slate-600 mt-8">
+        <p className="text-center text-xs text-slate-600 mt-10">
           Data hosted in France &middot; GDPR compliant &middot; No LinkedIn automation without your consent
         </p>
       </div>
