@@ -1,0 +1,27 @@
+{
+  "name": "mission-pilot-agent",
+  "version": "1.0.0",
+  "description": "MissionPilot local agent — LinkedIn scraper with stealth Playwright",
+  "author": "Riadh MNASRI",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start":   "tsx index.ts",
+    "session": "tsx index.ts --save-session",
+    "scan":    "tsx index.ts --scan",
+    "dev":     "tsx watch index.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "playwright":        "^1.49.0",
+    "chalk":             "^5.4.1",
+    "ora":               "^8.2.0",
+    "dotenv":            "^16.4.5"
+  },
+  "devDependencies": {
+    "tsx":         "^4.19.2",
+    "typescript":  "^5.7.3",
+    "@types/node": "^22.10.7"
+  }
+}
